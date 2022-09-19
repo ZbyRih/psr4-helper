@@ -17,13 +17,13 @@ Usage
 first you have to create config file psr4helper.neon in you current working directory:
 ```yml
 parameters:
-	path: App # folder name from current working directory
-	namespace: App\ # namespace root
-	caseUpdateOmmit: # names of folders that will be omitted from checking validation and changes
-		- templates
-		- translations
+    path: App # folder name from current working directory
+    namespace: App\ # namespace root
+    caseUpdateOmmit: # names of folders that will be omitted from checking validation and changes
+        - templates
+        - translations
 	psr4CheckClassEndsWithOmmit: # end names of classes that will be omitted from the psr4 check
-		- Presenter
+        - Presenter
 ```
 
 now, you can use console command options:
