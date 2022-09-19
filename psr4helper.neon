@@ -1,0 +1,8 @@
+parameters:
+	path: App
+	namespace: App\
+	expludeCaseUpdates:
+		- templates
+		- translations
+	excludePsr4CheckClassEndsWith:
+		- Presenter
