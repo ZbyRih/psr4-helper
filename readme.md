@@ -22,7 +22,7 @@ parameters:
     caseUpdateOmmit: # names of folders that will be omitted from checking validation and changes
         - templates
         - translations
-	psr4CheckClassEndsWithOmmit: # end names of classes that will be omitted from the psr4 check
+    psr4CheckClassEndsWithOmmit: # end names of classes that will be omitted from the psr4 check
         - Presenter
 ```
 
