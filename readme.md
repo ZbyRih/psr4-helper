@@ -19,10 +19,10 @@ first you have to create config file psr4helper.neon in you current working dire
 parameters:
     path: App # folder name from current working directory
     namespace: App\ # namespace root
-    caseUpdateOmmit: # names of folders that will be omitted from checking validation and changes
+    expludeCaseUpdates: # names of folders that will be excluded from checking validation and changes
         - templates
         - translations
-    psr4CheckClassEndsWithOmmit: # end names of classes that will be omitted from the psr4 check
+    excludePsr4CheckClassEndsWith: # end names of classes that will be excluded from the psr4 check
         - Presenter
 ```
 
