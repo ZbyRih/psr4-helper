@@ -34,9 +34,9 @@ now, you can use console command options:
     - case           : mismatch case
     - missing        : missing files for classes
   - find           : List of classes with a fully quantified name starting with a given value
-  - case-update    : Rename folders with mismatch case `info|rename`
+  - update-case    : Rename folders with mismatch case `info|rename`
     - info: just printing the information doesn't change anything
     - rename: change names of folders
   - create-dirs    : Create missing folders by classes namespaces
   - create-files   : Create missing files by multiple classes
-  - git-clear      : With `clear` value will remove all cached duplicate folders with mismatch case from index
+  - clear-git      : With `clear` value will remove all cached duplicate folders with mismatch case from index
