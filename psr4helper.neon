@@ -1,8 +1,7 @@
-parameters:
-	path: App
-	namespace: App\
-	expludeCaseUpdates:
-		- templates
-		- translations
-	excludePsr4CheckClassEndsWith:
-		- Presenter
+path: src
+namespace: ZbyRih\PSR4Helper\
+excludeCaseUpdates:
+	- templates
+	- translations
+excludePsr4CheckClassEndsWith:
+	- Presenter
