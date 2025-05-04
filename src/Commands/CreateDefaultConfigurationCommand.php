@@ -29,14 +29,13 @@ final class CreateDefaultConfigurationCommand extends Command
 		}
 
 		file_put_contents($file, <<<NEON
-parameters:
-	path: App
-	namespace: App\
-	excludeCaseUpdates:
-		- templates
-		- translations
-	excludePsr4CheckClassEndsWith:
-		- Presenter
+path: App
+namespace: App\
+excludeCaseUpdates:
+	- templates
+	- translations
+excludePsr4CheckClassEndsWith:
+	- Presenter
 NEON);
 
 		OutputFacade::success('Configuration file created.');

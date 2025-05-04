@@ -31,6 +31,10 @@ final class CleanGitIndexCommand extends Command
 
 		OutputFacade::info('Clearing git index of mismatch case duplicates');
 
+		if ($clear != 'clear') {
+			OutputFacade::info('Only differencies will be shown');	
+		}
+
 		try {
 			$output = self::gitExec('ls-files | xargs -n 1 dirname | uniq');
 		} catch (\Exception $e) {
