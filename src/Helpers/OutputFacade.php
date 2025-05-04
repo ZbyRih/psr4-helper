@@ -37,7 +37,7 @@ final class OutputFacade
 
 	public static function warning(string $message): void
 	{
-		self::$io->error($message);
+		self::$io->warning($message);
 	}
 
 	public static function error(string $message): void

@@ -2,6 +2,7 @@
 
 namespace ZbyRih\PSR4Helper\Commands;
 
+use Nette\Utils\FileSystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,21 +27,34 @@ final class CleanGitIndexCommand extends Command
 
 		$file = $input->getOption('file');
 		$clear = $input->getArgument('clear');
+		$clear = $clear ? $clear[0] : null;
 
 		$config = (new ConfigurationLoader())(FolderHelper::getCwd(), $file);
 
 		OutputFacade::info('Clearing git index of mismatch case duplicates');
 
 		if ($clear != 'clear') {
-			OutputFacade::info('Only differencies will be shown');	
+			OutputFacade::warning('Only differences will be shown');
 		}
 
 		try {
-			$output = self::gitExec('ls-files | xargs -n 1 dirname | uniq');
+			$output = self::gitExec("ls-files");
 		} catch (\Exception $e) {
 			OutputFacade::warning($e->getMessage());
 			exit;
 		}
+
+		$dirs = [];
+		foreach ($output as $file) {
+			$dir = dirname($file);
+
+			if ($dir !== "." && !empty($dir)) {
+				$dirs[$dir] = true;
+			}
+		}
+
+		$output = array_keys($dirs);
+		sort($output, SORT_STRING | SORT_FLAG_CASE);
 
 		$dirs = array_filter(
 			$output,
@@ -49,6 +63,11 @@ final class CleanGitIndexCommand extends Command
 				return '.' !== $lc && str_starts_with($lc, strtolower($config->gitIndexCheckFolder));
 			}
 		);
+
+		if (empty($dirs)) {
+			OutputFacade::warning('No folders found');
+			return Command::SUCCESS;
+		}
 
 		$dirsDuplicates = [];
 		foreach ($dirs as $line) {
@@ -66,6 +85,11 @@ final class CleanGitIndexCommand extends Command
 			fn($subDirs) => count($subDirs) > 1
 		);
 
+		if (empty($dirsDuplicates)) {
+			OutputFacade::warning('No duplicates found');
+			return Command::SUCCESS;
+		}
+
 		foreach ($dirsDuplicates as $dir => $subs) {
 			echo '    ' . $dir . PHP_EOL;
 			foreach ($subs as $sub) {
@@ -82,13 +106,17 @@ final class CleanGitIndexCommand extends Command
 
 		foreach ($dirsDuplicates as $subs) {
 			sort($subs, SORT_FLAG_CASE);
-			$first = array_pop($subs);
+			$first = reset($subs);
 
 			echo '  let ' . $first . PHP_EOL;
 
 			foreach ($subs as $sub) {
+				if (!is_dir('./' . $dir)) {
+					continue;
+				}
+
 				$count++;
-				echo '    rm --cached ' . $sub . PHP_EOL;
+				echo '    rm --cached -rf ' . $sub . PHP_EOL;
 				self::gitExec('rm --cached -rf ' . $sub);
 			}
 		}
@@ -107,10 +135,10 @@ final class CleanGitIndexCommand extends Command
 	{
 		$repoPath = getcwd();
 		$command = 'git -c core.quotepath=false --git-dir="' . $repoPath . '/.git" --work-tree="' . $repoPath . '" ' . $command;
-		$lastLine = exec('(' . $command . ') 2>&1', $output, $return);
+		$lastLine = exec('' . $command . ' 2>&1', $output, $return);
 
 		if (0 !== $return) {
-			throw new \Exception('nothing returned from git');
+			throw new \Exception('error returned from git');
 		}
 
 		if (!$lastLine) {

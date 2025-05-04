@@ -19,6 +19,6 @@ $application->addCommands([
 	new C\CleanGitIndexCommand(),
 ]);
 
-$application->setDefaultCommand('help');
+$application->setDefaultCommand('list');
 
 exit($application->run());
